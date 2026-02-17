@@ -1,0 +1,74 @@
+class BankAccount:
+    def __init__(self, account_number, balance):
+        self.account_number = account_number
+        self.__balance = balance   # Encapsulation (Private variable)
+
+    # Getter method to access balance
+    def get_balance(self):
+        return self.__balance
+
+    # Deposit method
+    def deposit(self, amount):
+        if amount > 0:
+            self.__balance += amount
+            print(f"Deposited: {amount}")
+        else:
+            print("Deposit amount must be positive.")
+
+    # Withdraw method
+    def withdraw(self, amount):
+        if amount <= 0:
+            print("Withdrawal amount must be positive.")
+        elif amount > self.__balance:
+            print("Insufficient balance.")
+        else:
+            self.__balance -= amount
+            print(f"Withdrawn: {amount}")
+
+
+# SavingsAccount subclass
+class SavingsAccount(BankAccount):
+    def __init__(self, account_number, balance, interest_rate):
+        super().__init__(account_number, balance)
+        self.interest_rate = interest_rate
+
+    def calculate_interest(self):
+        interest = self.get_balance() * self.interest_rate / 100
+        return interest
+
+
+# CurrentAccount subclass
+class CurrentAccount(BankAccount):
+    def __init__(self, account_number, balance, minimum_balance):
+        super().__init__(account_number, balance)
+        self.minimum_balance = minimum_balance
+
+    # Overriding withdraw method
+    def withdraw(self, amount):
+        if amount <= 0:
+            print("Withdrawal amount must be positive.")
+        elif self.get_balance() - amount < self.minimum_balance:
+            print("Cannot withdraw. Minimum balance requirement not maintained.")
+        else:
+            # Accessing protected balance using parent method
+            super().withdraw(amount)
+
+
+# ----------------------------
+# real example with amount 
+# ----------------------------
+
+# # Savings Account
+savings = SavingsAccount("SA123", 10000, 5)
+savings.deposit(2000)
+savings.withdraw(3000)
+print("Savings Balance:", savings.get_balance())
+print("Interest:", savings.calculate_interest())
+
+print("\n------------------\n")
+
+# Current Account
+current = CurrentAccount("CA456", 15000, 5000)
+current.withdraw(12000)  # Should fail due to minimum balance rule
+current.withdraw(8000)   # Should work
+print("Current Balance:", current.get_balance())
