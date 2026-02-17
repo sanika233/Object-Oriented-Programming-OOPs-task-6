@@ -1,0 +1,56 @@
+class Vehicle:
+    def __init__(self, model, rental_rate):
+        self.model = model
+        self._rental_rate = rental_rate   # Protected attribute
+
+    def calculate_rental(self, days):
+        return self._rental_rate * days
+
+
+# Car subclass
+class Car(Vehicle):
+    def __init__(self, model, rental_rate, luxury_charge):
+        super().__init__(model, rental_rate)
+        self.luxury_charge = luxury_charge
+
+    def calculate_rental(self, days):
+        # Base rent + luxury charge per day
+        return (self._rental_rate + self.luxury_charge) * days
+
+
+# Bike subclass
+class Bike(Vehicle):
+    def __init__(self, model, rental_rate, helmet_charge):
+        super().__init__(model, rental_rate)
+        self.helmet_charge = helmet_charge
+
+    def calculate_rental(self, days):
+        # Base rent + fixed helmet charge
+        return (self._rental_rate * days) + self.helmet_charge
+
+
+# Truck subclass
+class Truck(Vehicle):
+    def __init__(self, model, rental_rate, load_charge):
+        super().__init__(model, rental_rate)
+        self.load_charge = load_charge
+
+    def calculate_rental(self, days):
+        # Base rent + extra load charge
+        return (self._rental_rate * days) + self.load_charge
+
+
+# ----------------------------
+# Real exampel
+# ----------------------------
+
+vehicles = [
+    Car("Mercedes-benz", 2000, 500),
+    Bike("BMW Bike", 800, 200),
+    Truck("Audi", 5000, 3000)
+]
+
+rental_days = 3
+
+for v in vehicles:
+    print(f"{v.model} Rental Cost for {rental_days} days: {v.calculate_rental(rental_days)}")
